@@ -1,0 +1,12 @@
+{"id": "flow-map-basic-logistics", "prompt": "画一个物流流向地图，在四个区域的底图上展示滨江仓、云谷仓、山城仓和海港仓之间的运输线路", "groundTruth": "使用 type: 'geoView'；children 包含 geoPath 底图和 link 连线；link 的 encode.x/y 分别绑定起点、终点经度和纬度字段数组；数据与 GeoJSON 内联"}
+{"id": "flow-map-direction-arrows", "prompt": "展示城市间人口迁徙方向，每条连线都要有清晰的箭头指向目的地", "groundTruth": "使用 geoView + link 表达地理流向；link 的 style 包含 arrow: true，并设置合适的 arrowSize；x/y 字段数组顺序为起点到终点"}
+{"id": "flow-map-weighted-volume", "prompt": "画货物流向地图，不同线路的运输量不同，希望运量越大线条越粗", "groundTruth": "link 的 style.lineWidth 使用基于 volume 数值字段的回调进行映射；不要把 volume 交给 link 的 encode.size；起终点坐标使用 encode.x/y 字段数组"}
+{"id": "flow-map-route-type-color", "prompt": "在同一张流向地图上区分干线运输和支线运输，用不同颜色并显示图例", "groundTruth": "link 的 encode 增加 color: 'routeType' 或等价线路类别字段；可通过 scale.color.range 设置色板，并保留颜色图例"}
+{"id": "flow-map-hub-labels", "prompt": "除了仓库之间的运输线路，还要在地图上标出每个仓库的位置和名称", "groundTruth": "geoView.children 除 geoPath 和 link 外还包含 point；point 的 x/y 绑定节点经纬度，labels 的 text 绑定节点名称字段，position 可用 'top'"}
+{"id": "flow-map-tooltip-volume", "prompt": "鼠标放到线路时，提示里显示「起点 → 终点」和运输量，运输量单位是吨", "groundTruth": "link 的 tooltip.title 使用回调组合 source 与 target；tooltip.items 包含 volume 字段，name 为运输量，并通过 valueFormatter 添加 '吨' 单位"}
+{"id": "flow-map-base-style", "prompt": "流向地图的底图用很浅的灰色填充，区域边界用灰蓝色，不要让底图抢走线路的视觉重点", "groundTruth": "geoPath.style 设置浅色 fill、灰蓝色 stroke 和适当 lineWidth；link 使用更明显的 stroke；可将 geoPath 的 tooltip 设为 false"}
+{"id": "flow-map-mercator", "prompt": "用墨卡托投影绘制一张跨城市订单配送流向地图", "groundTruth": "在 type: 'geoView' 的配置上设置 coordinate: { type: 'mercator' }；不要使用 projection 配置；children 使用 geoPath 与 link"}
+{"id": "flow-map-inline-geojson", "prompt": "给我一个不依赖远程地图接口的流向地图示例，区域轮廓和线路数据都直接写在代码里", "groundTruth": "代码内联 GeoJSON Feature 或 FeatureCollection 作为 geoPath.data，同时内联含四个起终点坐标字段的 flows；无 fetch、远程 URL 或异步地图请求"}
+{"id": "flow-map-fixed-color", "prompt": "所有配送线路统一使用品牌蓝 #5B8FF9，线宽为 2，并带方向箭头", "groundTruth": "link.style 固定 stroke: '#5B8FF9'、lineWidth: 2、arrow: true；不需要 encode.color 分类；使用 geoView 组合 geoPath 与 link"}
+{"id": "flow-map-dense-opacity", "prompt": "线路比较多、交叉遮挡明显，把流向线设置为半透明，同时保留底图和方向", "groundTruth": "link.style 设置小于 1 的 strokeOpacity（如 0.75），并保留 arrow: true；使用 geoView + geoPath + link，起终点坐标映射正确"}
+{"id": "flow-map-od-fields", "prompt": "我的 OD 数据有 originLng、originLat、destinationLng、destinationLat 四个字段，请据此画航班流向，不要只用机场名称连线", "groundTruth": "link.encode.x 为 ['originLng', 'destinationLng']，y 为 ['originLat', 'destinationLat']；四个字段均为数值；使用 geoView 与 geoPath 底图，不依赖名称自动定位"}
