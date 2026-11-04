@@ -1,0 +1,15 @@
+{"id": "tile-density-basic-ride", "prompt": "我们有 800 条共享单车骑行记录，想同时看骑行距离和骑行时长的分布，散点太密糊成一片了", "groundTruth": "使用 type: 'rect' + transform: [{ type: 'bin', color: 'count', thresholdsX: 20 左右, thresholdsY: 15 左右 }]；encode 为 x: distance、y: duration；scale.color 用 sequential 顺序色阶；不要手动聚合数据"}
+{"id": "tile-density-overlap-users", "prompt": "用户活跃天数和消费金额两个指标，几万个用户点在一起完全看不出聚集在哪", "groundTruth": "瓦片密度图：rect + bin transform，颜色映射分箱计数；两轴均为连续数值；scale.color.type 为 sequential"}
+{"id": "tile-density-fixed-bins", "prompt": "要做一组对比图，几个月的数据放在一起看，希望每个格子的划分完全一样，方便横向比较", "groundTruth": "transform 中显式设置 thresholdsX 和 thresholdsY（分箱个数固定）；可选 scale.color.domain 固定色阶范围；type: 'rect' + bin"}
+{"id": "tile-density-brand-color", "prompt": "用我们的品牌色 #FF6B35 做密度色阶，从浅到深，不要用默认蓝色", "groundTruth": "scale.color.range 传颜色数组（如 ['#ffe8de', '#FF6B35']）；palette 只接受调色板名字符串，数组必须用 range；type: 'rect' + bin"}
+{"id": "tile-density-single-hue", "prompt": "想在一张浅色地图上叠加密度，只要单一颜色深浅，不要右边的色阶图例", "groundTruth": "transform 用 opacity: 'count'（而非 color: 'count'），颜色由 style.fill 固定，legend: false；可配 scale.opacity.range"}
+{"id": "tile-density-pre-aggregated", "prompt": "后端已经按距离区间和时长区间 group by 好了骑行次数，前端只需要把每个格子的数量画出来", "groundTruth": "不要再套 bin（会二次分箱，count 全是 1）；用 type: 'rect' + encode.x/x1/y/y1 给格子四边，encode.color 映射已有的计数字段"}
+{"id": "tile-density-tooltip", "prompt": "鼠标悬浮时要显示这个区间里有多少条订单，tooltip 写「订单数」并带「单」字", "groundTruth": "tooltip.items 使用 channel: 'color'（分箱后的计数通道）并设置 name: '订单数' 和 valueFormatter 加单位；不要用 field 指向原始字段"}
+{"id": "tile-density-legend-bottom", "prompt": "色阶图例放到图表底部，标题写「订单数」，刻度显示成「N 单」", "groundTruth": "legend.color.position 设为 'bottom'，title 设为 '订单数'，labelFormatter 回调拼接「单」；type: 'rect' + bin"}
+{"id": "tile-density-title", "prompt": "图表要有标题「用户消费分布」和副标题「数据截至 2026-09」，左对齐", "groundTruth": "title 为对象，包含 title、subtitle 字段，align 为 'left'；title 不能直接写字符串"}
+{"id": "tile-density-fixed-domain", "prompt": "两个月的密度图要并排比较，颜色深浅必须按同一套标准，最深色代表 50 单", "groundTruth": "scale.color.domain 固定为 [0, 50]，两张图共用同一 domain；type: 'rect' + bin"}
+{"id": "tile-density-tile-gap", "prompt": "格子之间想要一点缝隙、带一点圆角，看起来像一块块小瓦片", "groundTruth": "style 中设置 inset（如 1）和 radius（如 2）；type: 'rect' + bin"}
+{"id": "tile-density-axis-title", "prompt": "x 轴标题写「骑行距离（km）」，y 轴标题写「骑行时长（min）」", "groundTruth": "axis.x.title 和 axis.y.title 分别设置为对应文字；type: 'rect' + bin"}
+{"id": "tile-density-long-tail", "prompt": "客单价从 1 元到 10 万元都有，直接画出来点全挤在左边第一格里", "groundTruth": "等宽分箱对长尾无效：先对客单价做对数变换或按分位数裁剪/分组再分箱，或改用对数刻度并说明分箱边界；不要直接对原始极值范围做等宽 bin"}
+{"id": "tile-density-dark-theme", "prompt": "大屏展示用，暗色背景的密度图", "groundTruth": "设置 theme: 'classicDark' 或 'dark'；配 sequential 色阶（如 Blues / YlOrRd）；type: 'rect' + bin"}
+{"id": "tile-density-categorical-refuse", "prompt": "展示周一到周日、每天上午中午晚上三个时段的访问量，用颜色深浅看高峰", "groundTruth": "两轴都是类别，不适合瓦片密度（bin 需要连续数值轴）；应改用 type: 'cell' 的矩阵热力图，color 映射访问量"}
