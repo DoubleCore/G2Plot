@@ -1,0 +1,12 @@
+{"id": "choropleth-basic-region", "prompt": "我有一份各省份销售额数据和省级 GeoJSON，想用地图颜色深浅展示销售额的空间分布", "groundTruth": "使用 type: 'geoPath'；data.value 为 GeoJSON features；data.transform.join 按区域键关联合并销售额；encode.color 映射销售额；scale.color 使用 sequential 顺序色阶"}
+{"id": "choropleth-diverging-growth", "prompt": "用地图展示全国各省 GDP 同比增速，正增长和负增长要有明显不同的颜色，0 附近用中性色", "groundTruth": "使用 geoPath + 数值 color 编码；scale.color 使用 RdBu 等发散色阶，并设置以 0 为中心的对称 domain（如 [-10, 10]）"}
+{"id": "choropleth-missing-region", "prompt": "部分行政区还没有上报数据，地图上这些区域显示灰色，不要把它们当成 0", "groundTruth": "join 设置 unknown: null 或保留未知值；scale.color.unknown 设置灰色；缺失值不能替换为 0"}
+{"id": "choropleth-custom-blue", "prompt": "分级统计地图想用蓝色系，指标越大颜色越深", "groundTruth": "geoPath 的 scale.color 设置 type: 'sequential' 和 palette: 'Blues'（或从浅蓝到深蓝的 range）"}
+{"id": "choropleth-custom-range", "prompt": "地图填色改成从浅橙色 #fff7ec 到深橙色 #7f2704 的渐变", "groundTruth": "scale.color.range 设置为 ['#fff7ec', '#7f2704']；颜色数组放在 range 而不是 palette"}
+{"id": "choropleth-fixed-domain", "prompt": "各城市达标率一定是 0 到 100，地图色阶固定按这个范围，不要随当前数据最小最大值变化", "groundTruth": "scale.color 设置 domain: [0, 100]，并配合 sequential 色阶；encode.color 映射达标率"}
+{"id": "choropleth-border-style", "prompt": "行政区域之间用白色细分隔，边界线宽 1 像素", "groundTruth": "geoPath 的 style 设置 stroke: '#fff' 和 lineWidth: 1；数值填色仍由 encode.color 与 scale.color 控制"}
+{"id": "choropleth-tooltip-format", "prompt": "鼠标悬停省份时显示省名和人口，人口加千分位并带「万人」单位", "groundTruth": "tooltip.title 从 feature.properties 的区域名读取；items 包含人口字段，valueFormatter 使用 toLocaleString 并拼接「万人」"}
+{"id": "choropleth-join-nested-key", "prompt": "GeoJSON 的区域名在 feature.properties.name，业务数据里叫 provinceName，怎么关联后画各省销量地图", "groundTruth": "join.on 为 [(feature) => feature.properties.name, 'provinceName']；select 包含销量字段；不能用字符串 'properties.name' 代替嵌套属性回调"}
+{"id": "choropleth-multipolygon", "prompt": "我的 GeoJSON 有些沿海行政区是 MultiPolygon，包含多个岛屿，要按整个行政区的指标统一填色", "groundTruth": "保留 Polygon/MultiPolygon Feature 几何并传 features 给 geoPath；按 properties 中区域键 join 同一指标，不拆成经纬度散点"}
+{"id": "choropleth-world-projection", "prompt": "画一张世界各国人类发展指数的分级统计地图，用自然地球投影", "groundTruth": "geoPath 或 geoView 中的 geoPath 绘制国家 features；coordinate.type 设置为 'naturalEarth1'；join 国家指标并用 sequential 色阶映射 color"}
+{"id": "choropleth-inline-geojson", "prompt": "不请求任何远程接口，用内联的简化 GeoJSON 和业务数据画一个可运行的区域销售地图", "groundTruth": "GeoJSON 与业务数据均内联；data.value 使用 geoJSON.features；通过 data.transform.join 关联；使用 new Chart({ container: 'container', autoFit: true }) 和 chart.render()"}
