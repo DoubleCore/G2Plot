@@ -1,0 +1,11 @@
+{"id": "butterfly-basic", "prompt": "展示不同年龄段男女比例分布，用蝴蝶图展示两组数据的对称对比", "groundTruth": "使用 type: 'interval'；encode x为category，y为value，color为wing；数据需每个category同时存在left/right两个wing的值"} 
+{"id": "butterfly-age-gender", "prompt": "展示不同年龄段男女比例分布，用蝴蝶图对比男性和女性的比例", "groundTruth": "category为年龄段（如'0-18','18-35','35-50','50+'），wing为'男'/'女'，value为比例数值；每个category两行数据（男、女）"} 
+{"id": "butterfly-before-after", "prompt": "对比同一类别前后两组指标的变化，用蝴蝶图展翅膀形式", "groundTruth": "category为类别（如'指标A','指标B'），wing为'前'/'后'，value为数值变化量；翅膀长度体现变化幅度"} 
+{"id": "butterfly-custom-range", "prompt": "自定义蝴蝶图的翅膀颜色范围，用品牌色 '#5B8FF9' 和 '#5AD8A6'", "groundTruth": "scale: { color: { range: ['#5B8FF9', '#5AD8A6'] } }；color通道映射wing字段"} 
+{"id": "butterfly-offset", "prompt": "类别较多时调整翅膀间距防止重叠，用 offset 调整间距", "groundTruth": "style: { offset: 12 }；增大 bar 间水平偏移，防止相邻类别 bar 重叠"} 
+{"id": "butterfly-dark-theme", "prompt": "暗色主题的蝴蝶图，适配深色背景", "groundTruth": "theme: 'classicDark'；背景、文字颜色自动适配暗色场景"} 
+{"id": "butterfly-few-categories", "prompt": "类别较少（≤6个）的蝴蝶图，翅膀分布清晰", "groundTruth": "category最好≤6个；类别过多翅膀会重叠难以阅读；数据需每个category完整的left/right两行"} 
+{"id": "butterfly-value-labels", "prompt": "在蝴蝶图翅膀上标出具体数值标签", "groundTruth": "labels: [{ text: 'value', position: 'outside' }]；数值标签外侧展示，便于阅读具体数值"} 
+{"id": "butterfly-wing-colors", "prompt": "左翅膀和右翅膀使用不同颜色区分，便于视觉对比", "groundTruth": "encode: { color: 'wing' }自动根据wing字段区分颜色；或显式配 scale.color.range 两色"} 
+{"id": "butterfly-center-position", "prompt": "将坐标轴中心置中，形成精确的蝴蝶对称效果", "groundTruth": "axis: { y: { position: 'center' } }；将y轴位置置中，形成精确的上下对称翅膀效果"} 
+{"id": "butterfly-few-data-points", "prompt": "数据点较少的蝴蝶图快速起步", "groundTruth": "最少3个category，每个category 2个wing数据点（最少6行数据）；可快速验证翅膀形态"}
