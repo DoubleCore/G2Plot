@@ -1,0 +1,12 @@
+{"id": "hexbin-map-basic-bike", "prompt": "我有 3000 条共享单车的取车点经纬度，直接画散点全糊成一团了，想看看哪几个区域车最多", "groundTruth": "使用六边形分箱（hexbin）：先在数据层按蜂窝网格聚合，每行一个六边形并统计订单数；再用 type: 'point' + encode.shape: 'hexagon' 渲染，color 映射每格点数，颜色用 sequential 顺序色阶"}
+{"id": "hexbin-map-vs-scatter", "prompt": "只有 30 家门店的经纬度，我要在地图上精确标出每家店的位置，点开能看到店名", "groundTruth": "不应使用 hexbin 分箱（会合并点位、丢失单点身份）；使用 type: 'point' 散点 + tooltip 展示店名，或带 GeoJSON 的地图方案"}
+{"id": "hexbin-map-vs-heatmap", "prompt": "我想看星期几 × 时间段的访问量分布，画一个格子图", "groundTruth": "数据是两个类别维度的规则矩阵，应使用 heatmap 的 type: 'cell'；不是 hexbin（hexbin 面向连续二维坐标点的分箱）"}
+{"id": "hexbin-map-density-grid", "prompt": "用户点击位置（pageX/pageY）有 1 万多条，想按屏幕区域看点击热区，格子要六边形的", "groundTruth": "对 pageX/pageY 做六边形分箱（radius 用像素单位），聚合出每格点击数；type: 'point' + shape: 'hexagon' + sequential 色阶映射 count"}
+{"id": "hexbin-map-bin-radius", "prompt": "六边形格子太碎了，图上一大片小点，想让格子少一点、每个格子覆盖范围大一些", "groundTruth": "增大分箱半径 radius（数据单位），使横向大约 15~25 个格子；同时可增大 encode.size 让六边形 marker 与格子间距匹配"}
+{"id": "hexbin-map-size-encoding", "prompt": "除了颜色，我还想让订单越多的六边形画得越大，怎么同时用颜色和大小表达数量", "groundTruth": "encode 同时映射 color: 'orderCount' 和 size: 'orderCount'，shape: 'hexagon'；size 使用 scale.size.type: 'sqrt' 与 range（px），并说明 size 是外接圆半径"}
+{"id": "hexbin-map-aggregate-amount", "prompt": "每个蜂窝格子里不只看订单数，还要看平均客单价，颜色按客单价来", "groundTruth": "分箱时累计 amount 并除以订单数得到 avgAmount，color 映射 avgAmount；orderCount 保留在数据中并通过 tooltip 展示"}
+{"id": "hexbin-map-color-range", "prompt": "默认的黄红色阶太刺眼，想用品牌蓝从浅到深表示密度", "groundTruth": "scale.color 使用 type: 'sequential' 且用 range: ['#浅蓝', '#深蓝'] 自定义颜色数组；不能用 palette 传数组"}
+{"id": "hexbin-map-dark-screen", "prompt": "要做大屏，暗色背景，六边形热点图的高值区域要亮一点才看得清", "groundTruth": "设置 theme: 'classicDark'；scale.color.range 用深色到亮色的数组（低值贴近背景）；可按需调整 axis.labelFill / legend.itemLabelFill 提高对比度"}
+{"id": "hexbin-map-tooltip", "prompt": "鼠标悬浮到六边形上，要显示这个格子里的订单数和它的经纬度", "groundTruth": "tooltip.items 配置 field: 'orderCount'、field: 'lng'、field: 'lat'，坐标用 valueFormatter 保留两位小数；分箱结果需保留格子的中心坐标字段"}
+{"id": "hexbin-map-palette-error", "prompt": "给六边形密度图设置自定义颜色 ['#e8f4ff','#0050b3']，我写成了 scale.color.palette，图表不显示", "groundTruth": "palette 只接受调色板名字字符串（如 'YlOrRd'）；颜色数组必须用 scale.color.range，并保留 type: 'sequential'"}
+{"id": "hexbin-map-geo-projection", "prompt": "全国范围的经纬度点想做六边形密度图，但格子看起来被拉扁了", "groundTruth": "先把经纬度投影成等距坐标（如 Web Mercator）或做归一化再分箱；直接在经纬度上分箱会因经度间距随纬度收缩而变形，同时按投影单位重设 radius"}
